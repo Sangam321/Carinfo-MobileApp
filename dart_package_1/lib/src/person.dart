@@ -4,14 +4,18 @@ class Person {
   int age;
   String address;
 
-  Person(this.fname, this.lname, this.age, this.address);
+  Person(
+      {required this.fname,
+      required this.lname,
+      required this.age,
+      required this.address});
 
   Person copyWith({String? fname, String? lname, int? age, String? address}) {
     return Person(
-      fname ?? this.fname,
-      lname ?? this.lname,
-      age ?? this.age,
-      address ?? this.address,
+      fname: fname ?? this.fname,
+      lname: lname ?? this.lname,
+      age: age ?? this.age,
+      address: address ?? this.address,
     );
   }
 }

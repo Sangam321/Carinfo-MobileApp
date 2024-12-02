@@ -8,7 +8,8 @@
             "name": "dart_package_1",
             "cwd": "dart_package_1",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program":"lib/main.dart"
         }
     ]
 }

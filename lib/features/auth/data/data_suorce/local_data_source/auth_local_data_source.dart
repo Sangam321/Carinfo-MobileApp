@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carinfo/core/network/hive_service.dart';
 import 'package:carinfo/features/auth/data/data_suorce/auth_data_source.dart';
 import 'package:carinfo/features/auth/data/models/auth_hive_model.dart';
@@ -15,6 +17,7 @@ class AuthLocalDataSource implements IAuthDataSource {
       userId: "1",
       fName: "",
       email: "",
+      image: null,
       password: "",
       confirmPassword: "",
     ));
@@ -41,5 +44,9 @@ class AuthLocalDataSource implements IAuthDataSource {
     } catch (e) {
       return Future.error(e);
     }
+  }
+
+  Future<String> uploadProfilePicture(File file) {
+    throw UnimplementedError();
   }
 }

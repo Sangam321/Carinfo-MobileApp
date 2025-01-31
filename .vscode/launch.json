@@ -5,11 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "dart_package_1",
-            "cwd": "dart_package_1",
+            "name": "Carinfo_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Carinfo_app (profile mode)",
             "request": "launch",
             "type": "dart",
-            "program":"lib/main.dart"
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Carinfo_app (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
         }
     ]
 }

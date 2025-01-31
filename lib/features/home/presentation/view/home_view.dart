@@ -114,8 +114,8 @@ class HomeView extends StatelessWidget {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: 'Add',
+                icon: Icon(Icons.compare),
+                label: 'Compare',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.favorite),

@@ -1,16 +1,22 @@
-import 'package:carinfo/core/common/snackbar/my_snackbar.dart';
+import 'package:carinfo/core/network/hive_service.dart';
 import 'package:carinfo/features/auth/presentation/view/register_view.dart';
 import 'package:carinfo/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:carinfo/features/home/presentation/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +77,7 @@ class LoginView extends StatelessWidget {
                     TextFormField(
                       key: const ValueKey('password'),
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         filled: true,
@@ -80,7 +86,18 @@ class LoginView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
                         ),
-                        suffixIcon: Icon(Icons.remove_red_eye),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -104,22 +121,46 @@ class LoginView extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          final email = _emailController.text;
-                          final password = _passwordController.text;
+                          final email = _emailController.text.trim();
+                          final password = _passwordController.text.trim();
 
-                          if (email == 'sangam' && password == 'sangam123') {
-                            context.read<LoginBloc>().add(
-                                  NavigateHomeScreenEvent(
-                                    destination: HomeView(),
-                                    context: context,
-                                  ),
+                          // Initialize Hive service
+                          final hiveService = HiveService();
+
+                          try {
+                            final user =
+                                await hiveService.login(email, password);
+
+                            if (user != null) {
+                              // Ensure the widget is still mounted before accessing the context
+                              if (mounted) {
+                                context.read<LoginBloc>().add(
+                                      NavigateHomeScreenEvent(
+                                        destination: HomeView(),
+                                        context: context,
+                                      ),
+                                    );
+                              }
+                            } else {
+                              // Login failed: Show error message
+                              if (mounted) {
+                                showMySnackBar(
+                                  context: context,
+                                  message:
+                                      'Invalid email or password, or user is not registered.',
+                                  color: Colors.red,
                                 );
-                          } else {
-                            showMySnackBar(
-                              context: context,
-                              message: 'Invalid email or password',
-                              color: Colors.red,
-                            );
+                              }
+                            }
+                          } catch (e) {
+                            // Handle any other errors that may arise during login
+                            if (mounted) {
+                              showMySnackBar(
+                                context: context,
+                                message: 'Incorrect email or password.',
+                                color: Colors.red,
+                              );
+                            }
                           }
                         }
                       },
@@ -140,8 +181,6 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    // Divider with text
 
                     // Sign Up Text
                     Row(

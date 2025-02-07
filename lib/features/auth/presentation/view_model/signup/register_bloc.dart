@@ -33,7 +33,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       fname: event.fName,
       email: event.email,
       password: event.password,
-      confirmPassword: event.confirmPassword,
       image: state.imageName,
     ));
 

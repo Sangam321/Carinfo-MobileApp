@@ -19,9 +19,9 @@ class AuthHiveModelAdapter extends TypeAdapter<AuthHiveModel> {
     return AuthHiveModel(
       userId: fields[0] as String?,
       fName: fields[1] as String,
+      image: fields[3] as String?,
       email: fields[2] as String,
-      password: fields[3] as String,
-      confirmPassword: fields[4] as String,
+      password: fields[4] as String,
     );
   }
 
@@ -36,9 +36,9 @@ class AuthHiveModelAdapter extends TypeAdapter<AuthHiveModel> {
       ..writeByte(2)
       ..write(obj.email)
       ..writeByte(3)
-      ..write(obj.password)
+      ..write(obj.image)
       ..writeByte(4)
-      ..write(obj.confirmPassword);
+      ..write(obj.password);
   }
 
   @override

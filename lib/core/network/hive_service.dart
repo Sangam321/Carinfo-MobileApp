@@ -5,26 +5,19 @@ import 'package:path_provider/path_provider.dart';
 
 class HiveService {
   static Future<void> init() async {
+    // Initialize the database
     var directory = await getApplicationDocumentsDirectory();
-    var path = '${directory.path}carinfo.db';
+    var path = '${directory.path}chat_app.db';
 
     Hive.init(path);
 
+    // Register Adapters
     Hive.registerAdapter(AuthHiveModelAdapter());
   }
 
   // Auth Queries
   Future<void> register(AuthHiveModel auth) async {
     var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
-
-    // Check if a user with the same email already exists
-    bool userExists = box.values.any((element) => element.email == auth.email);
-
-    if (userExists) {
-      throw Exception('User with this email already exists.');
-    }
-
-    // Save the user in Hive
     await box.put(auth.userId, auth);
   }
 
@@ -38,16 +31,29 @@ class HiveService {
     return box.values.toList();
   }
 
-  // Login using username and password
+  // Login using email and password
   Future<AuthHiveModel?> login(String email, String password) async {
+    // var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
+    // var auth = box.values.firstWhere(
+    //     (element) =>
+    //         element.email == email && element.password == password,
+    //     orElse: () => AuthHiveModel.initial());
+    // return auth;
+
     var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
+    var user = box.values.firstWhere(
+        (element) => element.email == email && element.password == password);
+    box.close();
+    return user;
+  }
 
-    // Search for the user that matches both email and password
-    final user = box.values.firstWhere(
-      (element) => element.email == email && element.password == password,
-    );
+  Future<void> clearAll() async {
+    await Hive.deleteBoxFromDisk(HiveTableConstant.userBox);
+  }
 
-    return user; // Will be null if no user found with matching credentials
+  // Clear user Box
+  Future<void> clearuserBox() async {
+    await Hive.deleteBoxFromDisk(HiveTableConstant.userBox);
   }
 
   Future<void> close() async {

@@ -1,7 +1,7 @@
 import 'package:carinfo/app/constants/hive_table_constant.dart';
 import 'package:carinfo/features/auth/domain/entity/auth_entity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:uuid/uuid.dart';
 
 part 'auth_hive_model.g.dart';
@@ -14,35 +14,37 @@ class AuthHiveModel extends Equatable {
   final String fName;
   @HiveField(2)
   final String email;
+
   @HiveField(3)
-  final String password;
+  final String? image;
+
   @HiveField(4)
-  final String confirmPassword;
+  final String password;
 
   AuthHiveModel({
     String? userId,
     required this.fName,
+    this.image,
     required this.email,
     required this.password,
-    required this.confirmPassword,
   }) : userId = userId ?? const Uuid().v4();
 
   // Initial Constructor
   const AuthHiveModel.initial()
       : userId = '',
         fName = '',
+        image = '',
         email = '',
-        password = '',
-        confirmPassword = '';
+        password = '';
 
   // From Entity
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
       userId: entity.userId,
       fName: entity.fName,
+      image: entity.image,
       email: entity.email,
       password: entity.password,
-      confirmPassword: entity.confirmPassword,
     );
   }
 
@@ -51,12 +53,12 @@ class AuthHiveModel extends Equatable {
     return AuthEntity(
       userId: userId,
       fName: fName,
+      image: image,
       email: email,
       password: password,
-      confirmPassword: confirmPassword,
     );
   }
 
   @override
-  List<Object?> get props => [userId, fName, email, password, confirmPassword];
+  List<Object?> get props => [userId, fName, image, email, password];
 }

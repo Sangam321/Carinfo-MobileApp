@@ -71,7 +71,7 @@ class _RegisterViewState extends State<RegisterView> {
                         height: 80,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -111,13 +111,13 @@ class _RegisterViewState extends State<RegisterView> {
                         );
                       },
                       child: SizedBox(
-                        height: 200,
-                        width: 200,
+                        height: 90,
+                        width: 90,
                         child: CircleAvatar(
-                          radius: 50,
+                          radius: 60,
                           backgroundImage: _img != null
                               ? FileImage(_img!)
-                              : const AssetImage('assets/images/profile.png')
+                              : const AssetImage('assets/images/user.jpg')
                                   as ImageProvider,
                         ),
                       ),
@@ -267,14 +267,6 @@ class _RegisterViewState extends State<RegisterView> {
                                       _confirmpasswordController.text,
                                 ),
                               );
-
-                          // Show the snackbar directly here
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Registration Successful"),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -293,7 +285,6 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
 
                     // Divider with text

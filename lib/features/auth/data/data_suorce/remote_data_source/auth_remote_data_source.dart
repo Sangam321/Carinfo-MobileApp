@@ -11,27 +11,51 @@ class AuthRemoteDataSource implements IAuthDataSource {
   AuthRemoteDataSource(this._dio);
 
   @override
+  Future<String> loginUser(String email, String password) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.login,
+        data: {"email": email, "password": password},
+      );
+
+      if (response.statusCode == 200) {
+        final token = response.data['token'];
+        return token;
+      } else {
+        throw Exception('Failed to login. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        throw Exception('Dio error occurred: ${e.message}');
+      }
+      throw Exception('An error occurred during login: $e');
+    }
+  }
+
+  @override
   Future<void> registerUser(AuthEntity user) async {
     try {
       Response response = await _dio.post(
         ApiEndpoints.register,
         data: {
-          "fname": user.fName,
-          "image": user.image,
+          "email": user.email,
+          "fName": user.fName,
           "password": user.password,
-          "confirmPassword": user.confirmPassword,
+          "image": user.image,
         },
       );
 
-      if (response.statusCode == 200) {
-        return;
+      if (response.statusCode == 201) {
+        return; // Registration successful
       } else {
-        throw Exception(response.statusMessage);
+        throw Exception(
+            'Failed to register user. Status code: ${response.statusCode}');
       }
-    } on DioException catch (e) {
-      throw Exception(e);
     } catch (e) {
-      throw Exception(e);
+      if (e is DioException) {
+        throw Exception('Dio error occurred: ${e.message}');
+      }
+      throw Exception('An error occurred during registration: $e');
     }
   }
 
@@ -39,30 +63,6 @@ class AuthRemoteDataSource implements IAuthDataSource {
   Future<AuthEntity> getCurrentUser() {
     // TODO: implement getCurrentUser
     throw UnimplementedError();
-  }
-
-  @override
-  Future<String> loginUser(String username, String password) async {
-    try {
-      Response response = await _dio.post(
-        ApiEndpoints.login,
-        data: {
-          "username": username,
-          "password": password,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final str = response.data['token'];
-        return str;
-      } else {
-        throw Exception(response.statusMessage);
-      }
-    } on DioException catch (e) {
-      throw Exception(e);
-    } catch (e) {
-      throw Exception(e);
-    }
   }
 
   Future<String> uploadProfilePicture(File file) async {

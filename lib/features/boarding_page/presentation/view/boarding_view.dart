@@ -1,3 +1,4 @@
+import 'package:carinfo/app/di/di.dart';
 import 'package:carinfo/features/boarding_page/presentation/view_model/boarding_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ class BoardingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BoardingCubit(),
+      create: (context) => getIt<BoardingCubit>(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: BlocBuilder<BoardingCubit, int>(
@@ -19,9 +20,7 @@ class BoardingView extends StatelessWidget {
                 Expanded(
                   child: PageView.builder(
                     controller: cubit.pageController,
-                    onPageChanged: (index) {
-                      cubit.emit(index);
-                    },
+                    onPageChanged: (index) => cubit.emit(index),
                     itemCount: cubit.pages.length,
                     itemBuilder: (context, index) {
                       final page = cubit.pages[index];

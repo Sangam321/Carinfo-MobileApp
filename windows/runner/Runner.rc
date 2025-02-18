@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.sangam" "\0"
-            VALUE "FileDescription", "first_assignment" "\0"
+            VALUE "FileDescription", "carinfo" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "first_assignment" "\0"
+            VALUE "InternalName", "carinfo" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.sangam. All rights reserved." "\0"
-            VALUE "OriginalFilename", "first_assignment.exe" "\0"
-            VALUE "ProductName", "first_assignment" "\0"
+            VALUE "OriginalFilename", "carinfo.exe" "\0"
+            VALUE "ProductName", "carinfo" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

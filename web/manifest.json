@@ -1,6 +1,6 @@
 {
-    "name": "first_assignment",
-    "short_name": "first_assignment",
+    "name": "carinfo",
+    "short_name": "carinfo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

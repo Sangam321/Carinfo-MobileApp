@@ -1,4 +1,4 @@
-package com.sangam.first_assignment
+package com.example.carinfo
 
 import io.flutter.embedding.android.FlutterActivity
 

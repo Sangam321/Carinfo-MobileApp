@@ -10,6 +10,7 @@ import 'package:carinfo/features/auth/domain/use_case/register_user_usecase.dart
 import 'package:carinfo/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:carinfo/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:carinfo/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:carinfo/features/home/presentation/view_model/home_cubit.dart';
 import 'package:carinfo/features/splash/view_model/splash_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -22,10 +23,12 @@ Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
   await _initSharedPreferences();
-  await _initSplashDependencies();
-  await _initOnboardingDependencies();
+
+  await _initHomeDependencies();
   await _initRegisterDependencies();
   await _initLoginDependencies();
+
+  await _initSplashScreenDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -43,16 +46,6 @@ _initApiService() {
 _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
-
-_initSplashDependencies() {
-  getIt.registerFactory<SplashCubit>(() => SplashCubit());
-}
-
-_initOnboardingDependencies() {
-  getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
-}
-
-class OnboardingCubit {}
 
 _initRegisterDependencies() {
 // =========================== Data Source ===========================
@@ -95,15 +88,22 @@ _initRegisterDependencies() {
   );
 }
 
+_initHomeDependencies() async {
+  getIt.registerFactory<HomeCubit>(
+    () => HomeCubit(),
+  );
+}
+
 _initLoginDependencies() async {
   // =========================== Token Shared Preferences ===========================
   getIt.registerLazySingleton<TokenSharedPrefs>(
     () => TokenSharedPrefs(getIt<SharedPreferences>()),
   );
 
+  // =========================== Usecases ===========================
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
-      getIt<AuthLocalRepository>(),
+      getIt<AuthRemoteRepository>(),
       getIt<TokenSharedPrefs>(),
     ),
   );
@@ -111,7 +111,14 @@ _initLoginDependencies() async {
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
+      homeCubit: getIt<HomeCubit>(),
       loginUseCase: getIt<LoginUseCase>(),
     ),
+  );
+}
+
+_initSplashScreenDependencies() async {
+  getIt.registerFactory<SplashCubit>(
+    () => SplashCubit(getIt<LoginBloc>()),
   );
 }

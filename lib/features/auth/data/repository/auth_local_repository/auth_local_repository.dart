@@ -45,7 +45,8 @@ class AuthLocalRepository implements IAuthRepository {
 
   @override
   Future<Either<Failure, String>> uploadProfilePicture(File file) {
-    // TODO: implement uploadProfilePicture
+    // This method is not needed in the local repository as uploading is a remote task.
+    // Simply throw an UnimplementedError to indicate it is not implemented locally.
     throw UnimplementedError();
   }
 }

@@ -9,12 +9,9 @@ class LoginState {
     required this.isSuccess,
   });
 
-  factory LoginState.initial() {
-    return LoginState(
-      isLoading: false,
-      isSuccess: false,
-    );
-  }
+  LoginState.initial()
+      : isLoading = false,
+        isSuccess = false;
 
   LoginState copyWith({
     bool? isLoading,
@@ -25,6 +22,4 @@ class LoginState {
       isSuccess: isSuccess ?? this.isSuccess,
     );
   }
-
-  List<Object> get props => [isLoading, isSuccess];
 }

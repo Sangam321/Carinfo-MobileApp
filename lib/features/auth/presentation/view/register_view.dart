@@ -18,7 +18,6 @@ class _RegisterViewState extends State<RegisterView> {
   final _fnameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmpasswordController = TextEditingController();
 
   // Add state variables to control password visibility
   bool _isPasswordVisible = false;
@@ -217,7 +216,6 @@ class _RegisterViewState extends State<RegisterView> {
 
                     // Confirm Password TextField
                     TextFormField(
-                      controller: _confirmpasswordController,
                       obscureText: !_isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Confirm Password',
@@ -263,8 +261,6 @@ class _RegisterViewState extends State<RegisterView> {
                                   fName: _fnameController.text,
                                   email: _emailController.text,
                                   password: _passwordController.text,
-                                  confirmPassword:
-                                      _confirmpasswordController.text,
                                 ),
                               );
                         }

@@ -1,7 +1,5 @@
-import 'package:carinfo/core/network/hive_service.dart';
 import 'package:carinfo/features/auth/presentation/view/register_view.dart';
 import 'package:carinfo/features/auth/presentation/view_model/login/login_bloc.dart';
-import 'package:carinfo/features/home/presentation/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -121,47 +119,13 @@ class _LoginViewState extends State<LoginView> {
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          final email = _emailController.text.trim();
-                          final password = _passwordController.text.trim();
-
-                          // Initialize Hive service
-                          final hiveService = HiveService();
-
-                          try {
-                            final user =
-                                await hiveService.login(email, password);
-
-                            if (user != null) {
-                              // Ensure the widget is still mounted before accessing the context
-                              if (mounted) {
-                                context.read<LoginBloc>().add(
-                                      NavigateHomeScreenEvent(
-                                        destination: HomeView(),
-                                        context: context,
-                                      ),
-                                    );
-                              }
-                            } else {
-                              // Login failed: Show error message
-                              if (mounted) {
-                                showMySnackBar(
+                          context.read<LoginBloc>().add(
+                                LoginUserEvent(
                                   context: context,
-                                  message:
-                                      'Invalid email or password, or user is not registered.',
-                                  color: Colors.red,
-                                );
-                              }
-                            }
-                          } catch (e) {
-                            // Handle any other errors that may arise during login
-                            if (mounted) {
-                              showMySnackBar(
-                                context: context,
-                                message: 'Incorrect email or password.',
-                                color: Colors.red,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                ),
                               );
-                            }
-                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

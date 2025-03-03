@@ -8,7 +8,7 @@ part 'auth_api_model.g.dart';
 class AuthApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? id;
-  final String fname;
+  final String name;
   final String email;
 
   final String? image;
@@ -17,7 +17,7 @@ class AuthApiModel extends Equatable {
 
   const AuthApiModel({
     this.id,
-    required this.fname,
+    required this.name,
     required this.email,
     required this.image,
     required this.password,
@@ -32,7 +32,7 @@ class AuthApiModel extends Equatable {
   AuthEntity toEntity() {
     return AuthEntity(
       userId: id,
-      fName: fname,
+      name: name,
       email: email,
       image: image,
       password: password ?? '',
@@ -42,7 +42,7 @@ class AuthApiModel extends Equatable {
   // From Entity
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
-      fname: entity.fName,
+      name: entity.name,
       email: entity.email,
       image: entity.image,
       password: entity.password,
@@ -50,5 +50,5 @@ class AuthApiModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, fname, email, image, password];
+  List<Object?> get props => [id, name, email, image, password];
 }

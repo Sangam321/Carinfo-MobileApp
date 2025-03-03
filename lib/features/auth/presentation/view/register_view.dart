@@ -15,7 +15,7 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final _key = GlobalKey<FormState>();
-  final _fnameController = TextEditingController();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -136,7 +136,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                     // Full Name TextField
                     TextFormField(
-                      controller: _fnameController,
+                      controller: _nameController,
                       decoration: InputDecoration(
                         hintText: 'Full name',
                         filled: true,
@@ -258,7 +258,7 @@ class _RegisterViewState extends State<RegisterView> {
                           context.read<RegisterBloc>().add(
                                 RegisterUser(
                                   context: context,
-                                  fName: _fnameController.text,
+                                  name: _nameController.text,
                                   email: _emailController.text,
                                   password: _passwordController.text,
                                 ),

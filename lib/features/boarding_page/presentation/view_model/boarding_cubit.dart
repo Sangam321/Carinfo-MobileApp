@@ -48,7 +48,7 @@ class BoardingCubit extends Cubit<int> {
   void navigateToAuthScreen(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const LoginView(),
+        builder: (context) => LoginView(),
       ),
     );
   }

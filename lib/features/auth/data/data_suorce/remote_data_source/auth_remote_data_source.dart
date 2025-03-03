@@ -16,7 +16,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
       Response response = await _dio.post(
         ApiEndpoints.register,
         data: {
-          "fname": user.fName,
+          "name": user.name,
           "email": user.email,
           "image": user.image,
           "password": user.password,
@@ -53,15 +53,34 @@ class AuthRemoteDataSource implements IAuthDataSource {
       );
 
       if (response.statusCode == 200) {
-        final str = response.data['token'];
-        return str;
+        // First, check for token in response headers (cookies)
+        String? token;
+
+        // Extract token from cookies (Set-Cookie header)
+        if (response.headers.map.containsKey('set-cookie')) {
+          String cookieHeader = response.headers.map['set-cookie']!.first;
+          RegExp regExp = RegExp(r'token=([^;]+)');
+          Match? match = regExp.firstMatch(cookieHeader);
+          if (match != null) {
+            token = match.group(1);
+          }
+        }
+
+        // If token was not found in cookies, check the response body
+        token ??= response.data['token'];
+
+        if (token == null) {
+          throw Exception('Token not found in response');
+        }
+
+        return token;
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioException catch (e) {
-      throw Exception(e);
+      throw Exception('DioException: ${e.message}');
     } catch (e) {
-      throw Exception(e);
+      throw Exception('Error: ${e.toString()}');
     }
   }
 

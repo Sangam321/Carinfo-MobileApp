@@ -10,7 +10,7 @@ import 'repository.mock.dart';
 void main() {
   setUpAll(() {
     registerFallbackValue(AuthEntity(
-      fName: 'Test Name',
+      name: 'Test Name',
       email: 'test@example.com',
       password: 'testpassword',
       image: 'test.jpg',
@@ -26,14 +26,14 @@ void main() {
   });
 
   const tParams = RegisterUserParams(
-    fname: 'John Doe',
+    name: 'John Doe',
     email: 'johndoe@example.com',
     password: 'password123',
     image: 'profile.jpg',
   );
 
   final tAuthEntity = AuthEntity(
-    fName: tParams.fname,
+    name: tParams.name,
     email: tParams.email,
     password: tParams.password,
     image: tParams.image,
@@ -70,7 +70,7 @@ void main() {
         .thenAnswer((_) async => Left(DuplicateEmailFailure()));
 
     const duplicateEmailParams = RegisterUserParams(
-      fname: 'Sangam Basnet',
+      name: 'Sangam Basnet',
       email: '@example.com',
       password: 'password123',
       image: 'profile.jpg',

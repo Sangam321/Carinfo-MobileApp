@@ -19,7 +19,7 @@ class UploadImage extends RegisterEvent {
 
 class RegisterUser extends RegisterEvent {
   final BuildContext context;
-  final String fName;
+  final String name;
 
   final String email;
   final String password;
@@ -28,7 +28,7 @@ class RegisterUser extends RegisterEvent {
 
   const RegisterUser({
     required this.context,
-    required this.fName,
+    required this.name,
     required this.email,
     required this.password,
     this.image,

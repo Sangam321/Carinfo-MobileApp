@@ -14,6 +14,7 @@ class LoginParams extends Equatable {
     required this.password,
   });
 
+  // Initial Constructor
   const LoginParams.initial()
       : email = '',
         password = '';
@@ -29,17 +30,19 @@ class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
   LoginUseCase(this.repository, this.tokenSharedPrefs);
 
   @override
-  Future<Either<Failure, String>> call(LoginParams params) async {
+  Future<Either<Failure, String>> call(LoginParams params) {
     // Save token in Shared Preferences
-    final result = await repository.loginUser(params.email, params.password);
-    return result.fold(
-      (failure) => Left(failure),
-      (token) async {
-        await tokenSharedPrefs.saveToken(token);
-        final savedToken = await tokenSharedPrefs.getToken();
-        print(savedToken);
-        return Right(token);
-      },
-    );
+    return repository.loginUser(params.email, params.password).then((value) {
+      return value.fold(
+        (failure) => Left(failure),
+        (token) {
+          tokenSharedPrefs.saveToken(token);
+          tokenSharedPrefs.getToken().then((value) {
+            print(value);
+          });
+          return Right(token);
+        },
+      );
+    });
   }
 }

@@ -15,7 +15,7 @@ class AuthLocalDataSource implements IAuthDataSource {
     // Return Empty AuthEntity
     return Future.value(AuthEntity(
       userId: "1",
-      fName: "",
+      name: "",
       email: "",
       image: null,
       password: "",
@@ -45,6 +45,7 @@ class AuthLocalDataSource implements IAuthDataSource {
     }
   }
 
+  @override
   Future<String> uploadProfilePicture(File file) {
     throw UnimplementedError();
   }

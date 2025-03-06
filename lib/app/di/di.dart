@@ -1,4 +1,5 @@
 import 'package:carinfo/app/shared_prefs/token_shared_prefs.dart';
+import 'package:carinfo/core/common/internet_checker/internet_checker.dart';
 import 'package:carinfo/core/network/api_service.dart';
 import 'package:carinfo/core/network/hive_service.dart';
 import 'package:carinfo/features/auth/data/data_suorce/local_data_source/auth_local_data_source.dart';
@@ -29,7 +30,7 @@ Future<void> initDependencies() async {
   _initRegisterDependencies();
   _initLoginDependencies();
   _initSplashScreenDependencies();
-  _initBoardingDependencies(); // ✅ Added missing registration for BoardingCubit
+  _initBoardingDependencies();
 }
 
 // Initialize Shared Preferences
@@ -40,14 +41,18 @@ Future<void> _initSharedPreferences() async {
 
 // Initialize API Service
 void _initApiService() {
-  getIt.registerLazySingleton<Dio>(
-    () => ApiService(Dio()).dio,
+  getIt.registerLazySingleton<InternetChecker>(
+      () => InternetChecker()); // ✅ Register InternetChecker
+
+  getIt.registerLazySingleton<ApiService>(
+    () => ApiService(Dio(), getIt<InternetChecker>()), // ✅ Pass both arguments
   );
 }
 
 // Initialize Hive Service
 void _initHiveService() {
-  getIt.registerLazySingleton<HiveService>(() => HiveService());
+  getIt.registerLazySingleton<HiveService>(
+      () => HiveService(getIt<InternetChecker>()));
 }
 
 // Initialize Registration Dependencies
@@ -58,7 +63,7 @@ void _initRegisterDependencies() {
   );
 
   getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSource(getIt<Dio>()),
+    () => AuthRemoteDataSource(getIt<ApiService>().dio),
   );
 
   // =========================== Repository ===========================

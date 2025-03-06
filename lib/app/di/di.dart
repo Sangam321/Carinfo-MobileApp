@@ -26,6 +26,7 @@ Future<void> initDependencies() async {
   _initApiService();
   await _initSharedPreferences();
 
+  // Initialize feature dependencies
   _initHomeDependencies();
   _initRegisterDependencies();
   _initLoginDependencies();
@@ -44,7 +45,7 @@ void _initApiService() {
   getIt.registerLazySingleton<InternetChecker>(() => InternetChecker());
 
   getIt.registerLazySingleton<ApiService>(
-    () => ApiService(Dio(), getIt<InternetChecker>()), //
+    () => ApiService(Dio(), getIt<InternetChecker>()),
   );
 }
 
@@ -66,7 +67,7 @@ void _initRegisterDependencies() {
   );
 
   // =========================== Repository ===========================
-  getIt.registerLazySingleton(
+  getIt.registerLazySingleton<AuthLocalRepository>(
     () => AuthLocalRepository(getIt<AuthLocalDataSource>()),
   );
 
@@ -76,15 +77,11 @@ void _initRegisterDependencies() {
 
   // =========================== Use Cases ===========================
   getIt.registerLazySingleton<RegisterUseCase>(
-    () => RegisterUseCase(
-      getIt<AuthRemoteRepository>(),
-    ),
+    () => RegisterUseCase(getIt<AuthRemoteRepository>()),
   );
 
   getIt.registerLazySingleton<UploadImageUsecase>(
-    () => UploadImageUsecase(
-      getIt<AuthRemoteRepository>(),
-    ),
+    () => UploadImageUsecase(getIt<AuthRemoteRepository>()),
   );
 
   // =========================== Blocs ===========================
@@ -135,6 +132,7 @@ void _initSplashScreenDependencies() {
   );
 }
 
+// Initialize Boarding Screen Dependencies
 void _initBoardingDependencies() {
   getIt.registerFactory<BoardingCubit>(
     () => BoardingCubit(),

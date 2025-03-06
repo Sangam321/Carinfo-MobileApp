@@ -1,57 +1,21 @@
-import 'dart:io';
-
-import 'package:carinfo/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-class RegisterView extends StatefulWidget {
+import 'login_view.dart'; // Import the login view
+
+class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
-  final _key = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  // Add state variables to control password visibility
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
-
-  Future<void> checkCameraPermission() async {
-    if (await Permission.camera.request().isRestricted ||
-        await Permission.camera.request().isDenied) {
-      await Permission.camera.request();
-    }
-  }
-
-  File? _img;
-  Future _browseImage(ImageSource imageSource) async {
-    try {
-      final image = await ImagePicker().pickImage(source: imageSource);
-      if (image != null) {
-        setState(() {
-          _img = File(image.path);
-          // Send image to server
-          context.read<RegisterBloc>().add(
-                UploadImage(file: _img!),
-              );
-        });
-      } else {
-        return;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final key = GlobalKey<FormState>();
+    final nameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
+    // Add state variables to control password visibility
+    bool isPasswordVisible = false;
+    bool isConfirmPasswordVisible = false;
+
     return Scaffold(
       body: Center(
         child: SafeArea(
@@ -59,7 +23,7 @@ class _RegisterViewState extends State<RegisterView> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Form(
-                key: _key,
+                key: key,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -68,57 +32,6 @@ class _RegisterViewState extends State<RegisterView> {
                       child: Image.asset(
                         'assets/images/logo.png',
                         height: 80,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          backgroundColor: Colors.grey[300],
-                          context: context,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
-                          ),
-                          builder: (context) => Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    checkCameraPermission();
-                                    _browseImage(ImageSource.camera);
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(Icons.camera),
-                                  label: const Text('Camera'),
-                                ),
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    _browseImage(ImageSource.gallery);
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(Icons.image),
-                                  label: const Text('Gallery'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      child: SizedBox(
-                        height: 90,
-                        width: 90,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: _img != null
-                              ? FileImage(_img!)
-                              : const AssetImage('assets/images/user.jpg')
-                                  as ImageProvider,
-                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -136,7 +49,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                     // Full Name TextField
                     TextFormField(
-                      controller: _nameController,
+                      controller: nameController,
                       decoration: InputDecoration(
                         hintText: 'Full name',
                         filled: true,
@@ -157,7 +70,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                     // Email TextField
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       decoration: InputDecoration(
                         hintText: 'Email',
                         filled: true,
@@ -182,8 +95,8 @@ class _RegisterViewState extends State<RegisterView> {
 
                     // Password TextField
                     TextFormField(
-                      controller: _passwordController,
-                      obscureText: !_isPasswordVisible,
+                      controller: passwordController,
+                      obscureText: !isPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         filled: true,
@@ -194,14 +107,12 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordVisible
+                            isPasswordVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
+                            isPasswordVisible = !isPasswordVisible;
                           },
                         ),
                       ),
@@ -216,7 +127,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                     // Confirm Password TextField
                     TextFormField(
-                      obscureText: !_isConfirmPasswordVisible,
+                      obscureText: !isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Confirm Password',
                         filled: true,
@@ -227,15 +138,13 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isConfirmPasswordVisible
+                            isConfirmPasswordVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _isConfirmPasswordVisible =
-                                  !_isConfirmPasswordVisible;
-                            });
+                            isConfirmPasswordVisible =
+                                !isConfirmPasswordVisible;
                           },
                         ),
                       ),
@@ -243,7 +152,7 @@ class _RegisterViewState extends State<RegisterView> {
                         if (value == null || value.isEmpty) {
                           return 'Please confirm your password';
                         }
-                        if (value != _passwordController.text) {
+                        if (value != passwordController.text) {
                           return 'Passwords do not match';
                         }
                         return null;
@@ -254,15 +163,15 @@ class _RegisterViewState extends State<RegisterView> {
                     // Register Button
                     ElevatedButton(
                       onPressed: () {
-                        if (_key.currentState!.validate()) {
-                          context.read<RegisterBloc>().add(
-                                RegisterUser(
-                                  context: context,
-                                  name: _nameController.text,
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                ),
-                              );
+                        if (key.currentState!.validate()) {
+                          // You can add registration logic here if needed
+
+                          // After successful registration, navigate to LoginView
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginView()),
+                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -304,7 +213,12 @@ class _RegisterViewState extends State<RegisterView> {
                         const Text('Already have an account? '),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            // Optionally navigate to LoginView directly
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginView()),
+                            );
                           },
                           child: const Text(
                             'Sign In',

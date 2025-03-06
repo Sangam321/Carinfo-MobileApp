@@ -41,11 +41,10 @@ Future<void> _initSharedPreferences() async {
 
 // Initialize API Service
 void _initApiService() {
-  getIt.registerLazySingleton<InternetChecker>(
-      () => InternetChecker()); // ✅ Register InternetChecker
+  getIt.registerLazySingleton<InternetChecker>(() => InternetChecker());
 
   getIt.registerLazySingleton<ApiService>(
-    () => ApiService(Dio(), getIt<InternetChecker>()), // ✅ Pass both arguments
+    () => ApiService(Dio(), getIt<InternetChecker>()), //
   );
 }
 
@@ -136,7 +135,6 @@ void _initSplashScreenDependencies() {
   );
 }
 
-// ✅ Initialize Boarding Page Dependencies
 void _initBoardingDependencies() {
   getIt.registerFactory<BoardingCubit>(
     () => BoardingCubit(),

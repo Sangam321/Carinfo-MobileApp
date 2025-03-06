@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HiveService {
-  final InternetChecker _internetChecker; // Add a reference to InternetChecker
+  final InternetChecker _internetChecker;
 
   HiveService(
       this._internetChecker); // Constructor with InternetChecker dependency

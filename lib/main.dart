@@ -5,13 +5,8 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Hive Database
+
   await HiveService.init();
-
-  // Initialize Dependencies
-
-  // await HiveService().clearStudentBox();
-
   await initDependencies();
 
   runApp(

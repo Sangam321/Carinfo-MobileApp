@@ -130,7 +130,7 @@ class HomeView extends StatelessWidget {
             selectedItemColor: Colors.purple,
             unselectedItemColor: Colors.grey,
             onTap: (index) {
-              context.read<HomeCubit>().onTabTapped(index);
+              context.read<HomeCubit>().onTabTapped(index, context);
             },
           );
         },

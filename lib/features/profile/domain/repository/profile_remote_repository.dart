@@ -1,5 +1,5 @@
 import 'package:carinfo/core/network/api_service.dart';
-import 'package:carinfo/features/profile/domain/entity/user_entity.dart';
+import 'package:carinfo/features/profile/domain/entity/profile_entity.dart';
 import 'package:carinfo/features/profile/domain/repository/profile_repository.dart';
 import 'package:dio/dio.dart';
 

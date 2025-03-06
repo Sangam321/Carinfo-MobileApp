@@ -1,13 +1,14 @@
-class UserEntity {
+// profile_entity.dart
+class ProfileEntity {
+  final String id;
   final String name;
   final String email;
-  final String role;
-  final String photoUrl;
+  final String imageUrl;
 
-  UserEntity({
+  ProfileEntity({
+    required this.id,
     required this.name,
     required this.email,
-    required this.role,
-    required this.photoUrl,
+    required this.imageUrl,
   });
 }

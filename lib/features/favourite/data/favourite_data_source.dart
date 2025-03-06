@@ -4,7 +4,7 @@ import 'package:carinfo/features/favourite/domain/entity/favourite_entity.dart';
 import 'package:http/http.dart' as http;
 
 class FavouriteDataSource {
-  final String apiUrl = 'https://yourapi.com/favourites'; // Your API endpoint
+  final String apiUrl = '$base64Url';
 
   Future<List<FavouriteEntity>> fetchFavourites() async {
     try {

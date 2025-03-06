@@ -12,6 +12,11 @@ import 'package:carinfo/features/auth/domain/use_case/upload_image_usecase.dart'
 import 'package:carinfo/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:carinfo/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:carinfo/features/boarding_page/presentation/view_model/boarding_cubit.dart';
+import 'package:carinfo/features/car/data/data_source/local_data_source/car_local_data_source.dart';
+import 'package:carinfo/features/car/data/data_source/remote_data_source/car_remote_data_source.dart';
+import 'package:carinfo/features/car/domain/repository/local_repository/car_local_repository.dart';
+import 'package:carinfo/features/car/domain/repository/remote_repository/car_remote_repository.dart';
+import 'package:carinfo/features/car/presentation/view_model/car_bloc.dart';
 import 'package:carinfo/features/home/presentation/view_model/home_cubit.dart';
 import 'package:carinfo/features/splash/view_model/splash_cubit.dart';
 import 'package:dio/dio.dart';
@@ -32,6 +37,7 @@ Future<void> initDependencies() async {
   _initLoginDependencies();
   _initSplashScreenDependencies();
   _initBoardingDependencies();
+  _initCarDependencies();
 }
 
 // Initialize Shared Preferences
@@ -136,5 +142,33 @@ void _initSplashScreenDependencies() {
 void _initBoardingDependencies() {
   getIt.registerFactory<BoardingCubit>(
     () => BoardingCubit(),
+  );
+}
+
+void _initCarDependencies() {
+  // =========================== Data Sources ===========================
+  getIt.registerLazySingleton<CarLocalDataSource>(
+    () => CarLocalDataSource(), // Local data source (if you have one)
+  );
+
+  getIt.registerLazySingleton<CarRemoteDataSource>(
+    () => CarRemoteDataSource(
+        client: getIt<ApiService>().dio), // Remote data source
+  );
+
+  // =========================== Repositories ===========================
+  getIt.registerLazySingleton<CarLocalRepository>(
+    () => CarLocalRepository(
+        getIt<CarLocalDataSource>()), // Use local data source in repo
+  );
+
+  getIt.registerLazySingleton<CarRemoteRepository>(
+    () => CarRemoteRepository(
+        getIt<CarRemoteDataSource>()), // Use remote data source in repo
+  );
+
+  // =========================== BLoC ===========================
+  getIt.registerFactory<CarBloc>(
+    () => CarBloc(),
   );
 }
